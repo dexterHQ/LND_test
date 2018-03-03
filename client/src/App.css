@@ -1,0 +1,104 @@
+/*.App {
+  text-align: center;
+}
+
+.App-logo {
+  animation: App-logo-spin infinite 20s linear;
+  height: 80px;
+}
+
+.App-header {
+  background-color: #222;
+  height: 150px;
+  padding: 20px;
+  color: white;
+}
+
+.App-title {
+  font-size: 1.5em;
+}
+
+.App-intro {
+  font-size: large;
+}
+
+@keyframes App-logo-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}*/
+
+*{
+  margin: 0;
+  padding: 0;
+}
+
+body{
+  background-color: #EAEEF2;
+}
+
+button{
+  background-color: #20B1E3;
+  color: white;
+  padding: .5rem 1rem;
+  border: none;
+}
+
+input{
+  padding: .5rem 1rem;
+}
+
+.header{
+  background-color: #2ab3e3;
+  background-image: -webkit-linear-gradient(244deg, #2ab3e3 0%, #2e7fc8 100%);
+  background-image: -o-linear-gradient(244deg, #2ab3e3 0%, #2e7fc8 100%);
+  background-image: linear-gradient(334deg, #2ab3e3 0%, #2e7fc8 100%);
+  height: 400px;
+  width: 100%;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.header--title{
+  text-align: center;
+  color: white;
+  font-size: 3.2rem;
+}
+
+.header--subtitle{
+  text-align: center;
+  color: white;
+  font-weight: 400;
+  font-size: 2rem;
+}
+
+.modal{
+  padding: 1rem;
+  background-color: white;
+  width: 50%;
+  display: block;
+  margin: 0 auto;
+  margin-top: -1rem;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.container--body{
+  padding: 5rem;
+}
+
+.container--body p{
+  font-size: 1.2rem;
+  padding: 1rem 0;
+  border-bottom: 1px solid #C2CAD7;
+  color: #313233;
+}
+
+.sub{
+  font-size: 1rem;
+  color: #ABABAB;
+}
