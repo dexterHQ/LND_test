@@ -26,7 +26,7 @@ app.get('/api/hello', (req, res) => {
 app.get('/api/info', (req, res) => {
   var _call = lightning.getInfo({}, meta, function(err, response) {
       if (err) console.log(err);
-      if (response) res.send({ info: response.identity_pubkey});
+      if (response) res.send({ adresss: response.identity_pubkey, channels: response.num_active_channels });
   });
 })
 

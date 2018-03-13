@@ -12,7 +12,9 @@ class App extends Component {
 
   componentDidMount() {
     this.callApi()
-      .then(res => this.setState({ info: res.info }))
+      .then(res =>
+        this.setState({ channels: res.channels, address: res.address })
+      )
       .catch(err => console.log(err));
   }
 
@@ -39,13 +41,13 @@ class App extends Component {
         </div>
         <div className="container--body">
           <p>Node Public Key <br/>
-            <span className="sub">{this.state.info}</span>
+            <span className="sub">{this.state.address}</span>
           </p>
           <p>Node Balance <br/>
             <span className="sub">10000 Satoshis</span>
           </p>
           <p>Number of Active Channels <br/>
-            <span className="sub">0 Channels</span>
+            <span className="sub">{this.state.channels}</span>
           </p>
         </div>
       </div>
