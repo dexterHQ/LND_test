@@ -1,24 +1,43 @@
 import React, { Component } from 'react';
 
-import logo from './logo.svg';
-
 import './App.css';
 
 class App extends Component {
   state = {
-    // response: '',
-    info: ''
+    peers: '0',
+    address: '0x',
+    balance: '0',
   };
 
   componentDidMount() {
-    this.callApi()
+    this.getInfo()
       .then(res =>
-        this.setState({ channels: res.channels, address: res.address })
+        this.setState({address: res.address, peers: res.peers })
       )
       .catch(err => console.log(err));
+
+    this.getBalance()
+      .then(res =>
+        // console.log(res)
+        this.setState({ balance: res.total_balance })
+      )
+      .catch(err => console.log(err));
+
   }
 
-  callApi = async () => {
+  // probably cant include these API calls in a separate file
+  // could also probably abstract these functions out
+
+  getBalance = async () => {
+    const response = await fetch('/api/balance');
+    const body = await response.json();
+
+    if (response.status !== 200) throw Error(body.message);
+
+    return body;
+  }
+
+  getInfo = async () => {
     const response = await fetch('/api/info');
     const body = await response.json();
 
@@ -44,10 +63,10 @@ class App extends Component {
             <span className="sub">{this.state.address}</span>
           </p>
           <p>Node Balance <br/>
-            <span className="sub">10000 Satoshis</span>
+            <span className="sub">{this.state.balance} Satoshis</span>
           </p>
-          <p>Number of Active Channels <br/>
-            <span className="sub">{this.state.channels}</span>
+          <p>Number of Peers <br/>
+            <span className="sub">{this.state.peers}</span>
           </p>
         </div>
       </div>
