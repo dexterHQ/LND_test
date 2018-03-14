@@ -4,22 +4,29 @@ import './App.css';
 
 class App extends Component {
   state = {
-    peers: '0',
+    peers: 0,
     address: '0x',
-    balance: '0',
+    balance: 0,
+    channels: [],
   };
 
   componentDidMount() {
     this.getInfo()
       .then(res =>
-        this.setState({address: res.address, peers: res.peers })
+        this.setState({address: res.address, peers: res.peers, channels: res.channels})
       )
       .catch(err => console.log(err));
 
     this.getBalance()
       .then(res =>
-        // console.log(res)
         this.setState({ balance: res.total_balance })
+      )
+      .catch(err => console.log(err));
+
+    this.getChannels()
+      .then(res =>
+        console.log(res)
+        // this.setState({ balance: res.total_balance })
       )
       .catch(err => console.log(err));
 
@@ -46,6 +53,15 @@ class App extends Component {
     return body;
   };
 
+  getChannels = async () => {
+    const response = await fetch('/api/channels');
+    const body = await response.json();
+
+    if (response.status !== 200) throw Error(body.message);
+
+    return body;
+  };
+
   render() {
     return (
       <div className="App">
@@ -65,8 +81,14 @@ class App extends Component {
           <p>Node Balance <br/>
             <span className="sub">{this.state.balance} Satoshis</span>
           </p>
-          <p>Number of Peers <br/>
-            <span className="sub">{this.state.peers}</span>
+          <p>Peers ({this.state.peers})<br/>
+            <span className="sub">No peers. Connect now!</span><br/>
+          </p>
+          <p>Open Channels<br/>
+            {/* <span className="sub">{this.state.connections}</span><br/> */}
+            <span className="sub">Test One</span><br/>
+            <span className="sub">Test Two</span><br/>
+            <span className="sub">Test Three</span><br/>
           </p>
         </div>
       </div>

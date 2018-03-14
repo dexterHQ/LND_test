@@ -25,10 +25,25 @@ app.get('/api/hello', (req, res) => {
   res.send({ express: 'Hello From h' });
 });
 
+// getInfo
+// ----
+// simply calls the getInfo command
 app.get('/api/info', (req, res) => {
   var _call = lightning.getInfo({}, meta, function(err, response) {
       if (err) console.log(err);
-      if (response) res.send({ address: response.identity_pubkey, peers: response.num_peers });
+      if (response) res.send({ address: response.identity_pubkey, peers: response.num_peers, channels: response.num_active_channels });
+  });
+})
+
+// channels
+// ----
+// returns channel object.
+// will inspect for relevent info
+// keep it just as channels and pull stuff out in react ( in case of multiple channels ) ?
+app.get('/api/channels', (req, res) => {
+  var _call = lightning.listChannels({}, meta, function(err, response) {
+      if (err) console.log(err);
+      if (response) res.send({ channels: response.channels });
   });
 })
 
@@ -43,6 +58,17 @@ app.get('/api/balance', (req, res) => {
       if (response) res.send({total_balance: response.total_balance});
   });
 })
+
+
+// not sure how to send data?
+// maybe somthing to do with the req
+
+// app.get('/api/connect', (req, res) => {
+//   var _call = lightning.connectPeer({}, meta, function(err, response) {
+//       if (err) console.log(err);
+//       if (response) res.send({total_balance: response.total_balance});
+//   });
+// })
 
 
 app.listen(port, () => console.log(`Listening on port ${port}`));
