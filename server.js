@@ -7,6 +7,11 @@ const fs = require("fs");
 const app = express();
 const port = process.env.PORT || 5000;
 
+
+var bodyParser = require('body-parser')
+app.use(bodyParser.json());
+app.use(express.json());
+
 const lndCert = fs.readFileSync('/Users/mcgingras/Library/Application Support/LND/tls.cert');
 // const adminMacaroon = fs.readFileSync('/Users/mcgingras/Library/Application Support/LND/admin.macaroon');
 const localMacaroon = fs.readFileSync('/Users/mcgingras/go/dev/alice/test_data/admin.macaroon');
@@ -22,7 +27,7 @@ const lnrpc = lnrpcDescriptor.lnrpc;
 const lightning = new lnrpc.Lightning('localhost:10001', credentials);
 
 app.get('/api/hello', (req, res) => {
-  res.send({ express: 'Hello From h' });
+  res.send({ express: 'Hello From h', data: req.query.data});
 });
 
 // getInfo
@@ -62,13 +67,23 @@ app.get('/api/balance', (req, res) => {
 
 // not sure how to send data?
 // maybe somthing to do with the req
+app.get('/api/connect', (req, res) => {
+  var _call = lightning.connectPeer({}, meta, function(err, response) {
+      if (err) console.log(err);
+      if (response) res.send({total_balance: response.total_balance});
+  });
+})
 
-// app.get('/api/connect', (req, res) => {
-//   var _call = lightning.connectPeer({}, meta, function(err, response) {
-//       if (err) console.log(err);
-//       if (response) res.send({total_balance: response.total_balance});
-//   });
-// })
-
+// invoice
+// ----
+// generate an invoice
+// value - how much to send
+// payment request -- invoice to give to other person
+app.get('/api/invoice', (req, res) => {
+  var _call = lightning.addInvoice({value: req.query.value}, meta, function(err, response) {
+    if (err) console.log(err);
+    if (response) res.send({req: response.payment_request})
+  });
+})
 
 app.listen(port, () => console.log(`Listening on port ${port}`));

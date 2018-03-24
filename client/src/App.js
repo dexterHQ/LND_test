@@ -11,6 +11,13 @@ class App extends Component {
   };
 
   componentDidMount() {
+
+    this.hello(this.state.address)
+      .then(res =>
+        console.log(res)
+      )
+      .catch(err => console.log(err));
+
     this.getInfo()
       .then(res =>
         this.setState({address: res.address, peers: res.peers, channels: res.channels})
@@ -60,7 +67,27 @@ class App extends Component {
     if (response.status !== 200) throw Error(body.message);
 
     return body;
+  }
+
+  genInvoice = async (amount) => {
+    const response = await fetch('/api/invoice?amount='+amount);
+    const body = await response.json();
+    console.log(body);
+
+    if (response.status !== 200) throw Error(body.message);
+
+    return body;
+  }
+
+  hello = async (data) => {
+    const response = await fetch('/api/hello?data='+data);
+    const body = await response.json();
+
+    if (response.status !== 200) throw Error(body.message);
+
+    return body;
   };
+
 
   render() {
     return (
@@ -89,6 +116,10 @@ class App extends Component {
             <span className="sub">Test One</span><br/>
             <span className="sub">Test Two</span><br/>
             <span className="sub">Test Three</span><br/>
+          </p>
+          <p>Generate Invoice<br/>
+            <span className="sub">Amount <input type="text" /></span>
+            <button onClick={() => this.genInvoice(1000)}>Submit</button>
           </p>
         </div>
       </div>
