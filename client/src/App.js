@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Modal } from 'semantic-ui-react'
+import { Button, Header, Modal, Image } from 'semantic-ui-react'
 
 import './App.css';
 
@@ -10,7 +10,11 @@ class App extends Component {
     balance: 0,
     invoice: '',
     channels: [],
+    open: false
   };
+
+  close = () => this.setState({ open: false })
+  show  = () => this.setState({ open: true })
 
   componentDidMount() {
 
@@ -94,9 +98,24 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <header className="header">
-          <h1 className="header--title">DEXTER</h1>
-          <h3 className="header--subtitle">Lightning Network Test</h3>
+        <header className="hero">
+          <h1 className="hero--title">DEXTER</h1>
+          <h3 className="hero--subtitle">Lightning Network Test</h3>
+          <Button onClick={this.show}>Create a LN Node</Button>
+
+          <Modal dimmer="blurring" open={this.state.open} onClose={this.close}>
+           <Modal.Header>Welcome!</Modal.Header>
+           <Modal.Content>
+             <Modal.Description>
+               <Header>Create a Node</Header>
+               <p>In order to get started, make sure your LND instance is running in a terminal window. That's all you need to do for now!</p>
+               <p>Next, enter a password. (Whats the security on this?)</p>
+             </Modal.Description>
+           </Modal.Content>
+           <Modal.Actions>
+             <Button color="green" positive icon='checkmark' labelPosition='right' content="Continue" onClick={this.close} />
+           </Modal.Actions>
+         </Modal>
 
         </header>
         {/* <div className="modal">

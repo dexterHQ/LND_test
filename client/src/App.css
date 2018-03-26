@@ -47,7 +47,7 @@ input{
   padding: .5rem 1rem;
 }
 
-.header{
+.hero{
   background-color: #2ab3e3;
   background-image: -webkit-linear-gradient(244deg, #2ab3e3 0%, #2e7fc8 100%);
   background-image: -o-linear-gradient(244deg, #2ab3e3 0%, #2e7fc8 100%);
@@ -61,19 +61,19 @@ input{
   align-items: center;
 }
 
-.header--title{
+.hero--title{
   text-align: center;
   color: white;
   font-size: 3.2rem;
 }
 
-.header--subtitle{
+.hero--subtitle{
   text-align: center;
   color: white;
   font-weight: 400;
   font-size: 2rem;
-  line-height: 0;
-  margin: 0;
+  margin-top: 0;
+  margin-bottom: 20px;
 }
 
 .modal{
