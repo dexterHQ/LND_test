@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Button, Modal } from 'semantic-ui-react'
 
 import './App.css';
 
@@ -7,6 +8,7 @@ class App extends Component {
     peers: 0,
     address: '0x',
     balance: 0,
+    invoice: '',
     channels: [],
   };
 
@@ -95,12 +97,13 @@ class App extends Component {
         <header className="header">
           <h1 className="header--title">DEXTER</h1>
           <h3 className="header--subtitle">Lightning Network Test</h3>
+
         </header>
-        <div className="modal">
+        {/* <div className="modal">
           <span>Address <input type="text" /></span>
           <span>Amount <input type="text" /></span>
           <button>SEND</button>
-        </div>
+        </div> */}
         <div className="container--body">
           <p>Node Public Key <br/>
             <span className="sub">{this.state.address}</span>
@@ -119,7 +122,8 @@ class App extends Component {
           </p>
           <p>Generate Invoice<br/>
             <span className="sub">Amount <input type="text" /></span>
-            <button onClick={() => this.genInvoice(1000)}>Submit</button>
+            <button onClick={() => this.genInvoice(1000).then(res => this.setState({'invoice': res.req}))}>Submit</button>
+            <span className="sub">{this.state.invoice}</span>
           </p>
         </div>
       </div>

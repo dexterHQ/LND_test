@@ -10,7 +10,8 @@
     "body-parser": "^1.18.2",
     "express": "^4.16.3",
     "grpc": "^1.9.1",
-    "nodemon": "^1.17.1"
+    "nodemon": "^1.17.1",
+    "semantic-ui-react": "^0.79.0"
   },
   "devDependencies": {
     "concurrently": "^3.5.0"

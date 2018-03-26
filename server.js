@@ -14,7 +14,7 @@ app.use(express.json());
 
 const lndCert = fs.readFileSync('/Users/mcgingras/Library/Application Support/LND/tls.cert');
 // const adminMacaroon = fs.readFileSync('/Users/mcgingras/Library/Application Support/LND/admin.macaroon');
-const localMacaroon = fs.readFileSync('/Users/mcgingras/go/dev/alice/test_data/admin.macaroon');
+const localMacaroon = fs.readFileSync('/Users/mcgingras/go/dev/charlie/test_data/admin.macaroon');
 
 const meta = new grpc.Metadata();
 // meta.add('macaroon', adminMacaroon.toString('hex'));
@@ -24,7 +24,7 @@ const credentials = grpc.credentials.createSsl(lndCert);
 
 const lnrpcDescriptor = grpc.load("rpc.proto");
 const lnrpc = lnrpcDescriptor.lnrpc;
-const lightning = new lnrpc.Lightning('localhost:10001', credentials);
+const lightning = new lnrpc.Lightning('localhost:10003', credentials);
 
 app.get('/api/hello', (req, res) => {
   res.send({ express: 'Hello From h', data: req.query.data});
