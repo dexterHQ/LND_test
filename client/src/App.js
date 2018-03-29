@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { Button, Header, Modal, Image } from 'semantic-ui-react'
 
+import APIS from './actions/api'
+
 import ModalLink from './components/Modal'
 import WalletStatsContainer from './components/walletStatsContainer'
 
@@ -13,7 +15,6 @@ class App extends Component {
     balance: 0,
     invoice: '',
     channels: [],
-    wallet: 'what',
     isWallet: false,
   };
 
@@ -46,65 +47,6 @@ class App extends Component {
 
   }
 
-  // probably cant include these API calls in a separate file
-  // could also probably abstract these functions out
-
-  getBalance = async () => {
-    const response = await fetch('/api/balance');
-    const body = await response.json();
-
-    if (response.status !== 200) throw Error(body.message);
-
-    return body;
-  }
-
-  getInfo = async () => {
-    const response = await fetch('/api/info');
-    const body = await response.json();
-
-    if (response.status !== 200) throw Error(body.message);
-
-    return body;
-  };
-
-  getChannels = async () => {
-    const response = await fetch('/api/channels');
-    const body = await response.json();
-
-    if (response.status !== 200) throw Error(body.message);
-
-    return body;
-  }
-
-  genInvoice = async (amount) => {
-    const response = await fetch('/api/invoice?amount='+amount);
-    const body = await response.json();
-    console.log(body);
-
-    if (response.status !== 200) throw Error(body.message);
-
-    return body;
-  }
-
-  hello = async (data) => {
-    const response = await fetch('/api/hello?data='+data);
-    const body = await response.json();
-
-    if (response.status !== 200) throw Error(body.message);
-
-    return body;
-  };
-
-  createWallet = async (password) => {
-    const response = await fetch('/api/createWallet?password='+password);
-    const body = await response.json();
-
-    if (response.status !== 200) throw Error(body.message);
-    this.setState({'wallet': body.res.wallet });
-    return body;
-  };
-
-
   render() {
     return (
       <div className="App">
@@ -112,11 +54,10 @@ class App extends Component {
           <h1 className="hero--title">DEXTER</h1>
           <h3 className="hero--subtitle">Lightning Network Test</h3>
           <p>{this.state.wallet}</p>
-
-          <ModalLink title="Create a LN node"></ModalLink>
+          {!this.state.wallet && <ModalLink title="Create a LN Node"></ModalLink>}
         </header>
 
-        <WalletStatsContainer></WalletStatsContainer>
+        {this.state.isWallet && <WalletStatsContainer address={this.state.address} balance={this.state.balance}></WalletStatsContainer> }
       </div>
     );
   }

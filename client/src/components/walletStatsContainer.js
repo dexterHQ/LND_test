@@ -7,10 +7,10 @@ const WalletStatsContainer = () => (
 
 <div className="container--body">
   <p>Node Public Key <br/>
-    <span className="sub">{this.state.address}</span>
+    <span className="sub">{this.props.address}</span>
   </p>
   <p>Node Balance <br/>
-    <span className="sub">{this.state.balance} Satoshis</span>
+    <span className="sub">{this.props.balance} Satoshis</span>
   </p>
   <p>Peers ({this.state.peers})<br/>
     <span className="sub">No peers. Connect now!</span><br/>
