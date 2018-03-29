@@ -25,6 +25,8 @@ const credentials = grpc.credentials.createSsl(lndCert);
 const lnrpcDescriptor = grpc.load("rpc.proto");
 const lnrpc = lnrpcDescriptor.lnrpc;
 const lightning = new lnrpc.Lightning('localhost:10001', credentials);
+const walletUnlocker = new lnrpc.WalletUnlocker('localhost:10001', credentials);
+
 
 app.get('/api/hello', (req, res) => {
   res.send({ express: 'Hello From h', data: req.query.data});
@@ -82,8 +84,40 @@ app.get('/api/connect', (req, res) => {
 app.get('/api/invoice', (req, res) => {
   var _call = lightning.addInvoice({value: req.query.value}, meta, function(err, response) {
     if (err) console.log(err);
-    if (response) res.send({req: response.payment_request})
+    if (response) res.send({res: "wallet created"})
   });
 })
+
+
+// // createWallet
+// // ----
+// // generates a wallet for the user
+// // password - the password to encrypt it
+// // note: the security totally needs work -- just tryna get it to work
+// app.get('/api/createWallet', (req, res) => {
+//   var _call = walletUnlocker.genSeed({}, function(err, response){
+//     if (err) console.log(err);
+//     if (response) {
+//       var seed  = response.cipher_seed_mnemonic;
+//       var _call = walletUnlocker.initWallet({wallet_password: req.query.password, cipher_seed_mnemonic: seed, aezeed_passphrase: "invalid??"},
+//       function(err, response){
+//         if (err) console.log(err);
+//         if (response) res.send({wallet: "wallet is created"});
+//       })
+//     }
+//   })
+// })
+//
+// // unlockWallet
+// // ----
+// // unlocks an existing wallet
+// // password - the password to encrypt it
+// app.get('/api/unlockWallet', (req, res) => {
+//   var _call = walletUnlocker.unlockWallet({wallet_password: req.query.password}, function(err, response) {
+//     if (err) console.log(err);
+//     if (response) res.send({res: "wallet unlocked"})
+//   });
+// })
+
 
 app.listen(port, () => console.log(`Listening on port ${port}`));
