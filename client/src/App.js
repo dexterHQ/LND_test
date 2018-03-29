@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import { Button, Header, Modal, Image } from 'semantic-ui-react'
 
+import ModalLink from './components/Modal'
+import WalletStatsContainer from './components/walletStatsContainer'
+
 import './App.css';
 
 class App extends Component {
@@ -10,11 +13,9 @@ class App extends Component {
     balance: 0,
     invoice: '',
     channels: [],
-    open: false
+    wallet: 'what',
+    isWallet: false,
   };
-
-  close = () => this.setState({ open: false })
-  show  = () => this.setState({ open: true })
 
   componentDidMount() {
 
@@ -94,6 +95,15 @@ class App extends Component {
     return body;
   };
 
+  createWallet = async (password) => {
+    const response = await fetch('/api/createWallet?password='+password);
+    const body = await response.json();
+
+    if (response.status !== 200) throw Error(body.message);
+    this.setState({'wallet': body.res.wallet });
+    return body;
+  };
+
 
   render() {
     return (
@@ -101,50 +111,12 @@ class App extends Component {
         <header className="hero">
           <h1 className="hero--title">DEXTER</h1>
           <h3 className="hero--subtitle">Lightning Network Test</h3>
-          <Button onClick={this.show}>Create a LN Node</Button>
+          <p>{this.state.wallet}</p>
 
-          <Modal dimmer="blurring" open={this.state.open} onClose={this.close}>
-           <Modal.Header>Welcome!</Modal.Header>
-           <Modal.Content>
-             <Modal.Description>
-               <Header>Create a Node</Header>
-               <p>In order to get started, make sure your LND instance is running in a terminal window. That's all you need to do for now!</p>
-               <p>Next, enter a password. (Whats the security on this?)</p>
-             </Modal.Description>
-           </Modal.Content>
-           <Modal.Actions>
-             <Button color="green" positive icon='checkmark' labelPosition='right' content="Continue" onClick={this.close} />
-           </Modal.Actions>
-         </Modal>
-
+          <ModalLink title="Create a LN node"></ModalLink>
         </header>
-        {/* <div className="modal">
-          <span>Address <input type="text" /></span>
-          <span>Amount <input type="text" /></span>
-          <button>SEND</button>
-        </div> */}
-        <div className="container--body">
-          <p>Node Public Key <br/>
-            <span className="sub">{this.state.address}</span>
-          </p>
-          <p>Node Balance <br/>
-            <span className="sub">{this.state.balance} Satoshis</span>
-          </p>
-          <p>Peers ({this.state.peers})<br/>
-            <span className="sub">No peers. Connect now!</span><br/>
-          </p>
-          <p>Open Channels<br/>
-            {/* <span className="sub">{this.state.connections}</span><br/> */}
-            <span className="sub">Test One</span><br/>
-            <span className="sub">Test Two</span><br/>
-            <span className="sub">Test Three</span><br/>
-          </p>
-          <p>Generate Invoice<br/>
-            <span className="sub">Amount <input type="text" /></span>
-            <button onClick={() => this.genInvoice(1000).then(res => this.setState({'invoice': res.req}))}>Submit</button>
-            <span className="sub">{this.state.invoice}</span>
-          </p>
-        </div>
+
+        <WalletStatsContainer></WalletStatsContainer>
       </div>
     );
   }
