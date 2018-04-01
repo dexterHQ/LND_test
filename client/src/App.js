@@ -20,30 +20,25 @@ class App extends Component {
 
   componentDidMount() {
 
-    this.hello(this.state.address)
-      .then(res =>
-        console.log(res)
-      )
-      .catch(err => console.log(err));
 
-    this.getInfo()
-      .then(res =>
-        this.setState({address: res.address, peers: res.peers, channels: res.channels})
-      )
-      .catch(err => console.log(err));
-
-    this.getBalance()
-      .then(res =>
-        this.setState({ balance: res.total_balance })
-      )
-      .catch(err => console.log(err));
-
-    this.getChannels()
-      .then(res =>
-        console.log(res)
-        // this.setState({ balance: res.total_balance })
-      )
-      .catch(err => console.log(err));
+    // this.getInfo()
+    //   .then(res =>
+    //     this.setState({address: res.address, peers: res.peers, channels: res.channels})
+    //   )
+    //   .catch(err => console.log(err));
+    //
+    // this.getBalance()
+    //   .then(res =>
+    //     this.setState({ balance: res.total_balance })
+    //   )
+    //   .catch(err => console.log(err));
+    //
+    // this.getChannels()
+    //   .then(res =>
+    //     console.log(res)
+    //     // this.setState({ balance: res.total_balance })
+    //   )
+    //   .catch(err => console.log(err));
 
   }
 
