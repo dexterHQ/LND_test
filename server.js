@@ -7,17 +7,19 @@ const fs = require("fs");
 const app = express();
 const port = process.env.PORT || 5000;
 
+let btoa = (s) => { return Buffer.from(s).toString('base64') }
 
-TODO:
+//TODO:
 // since these files will only exist after the wallet is created, what is the best way
 // to periodically check for their existance?
+
 const lndCert = fs.readFileSync('/Users/mcgingras/Library/Application Support/LND/tls.cert');
 // const adminMacaroon = fs.readFileSync('/Users/mcgingras/Library/Application Support/LND/admin.macaroon');
-const localMacaroon = fs.readFileSync('/Users/mcgingras/go/dev/alice/test_data/admin.macaroon');
+// const localMacaroon = fs.readFileSync('/Users/mcgingras/go/dev/alice/test_data/admin.macaroon');
 
 const meta = new grpc.Metadata();
 // meta.add('macaroon', adminMacaroon.toString('hex'));
-meta.add('macaroon', localMacaroon.toString('hex'));
+// meta.add('macaroon', localMacaroon.toString('hex'));
 process.env.GRPC_SSL_CIPHER_SUITES = "ECDHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-SHA256:ECDHE-RSA-AES256-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES128-SHA256:ECDHE-ECDSA-AES256-SHA384:ECDHE-ECDSA-AES256-GCM-SHA384";
 const credentials = grpc.credentials.createSsl(lndCert);
 
@@ -94,24 +96,25 @@ app.get('/api/invoice', (req, res) => {
 })
 
 
-// // createWallet
-// // ----
-// // generates a wallet for the user
-// // password - the password to encrypt it
-// // note: the security totally needs work -- just tryna get it to work
-// app.get('/api/createWallet', (req, res) => {
-//   var _call = walletUnlocker.genSeed({}, function(err, response){
-//     if (err) console.log(err);
-//     if (response) {
-//       var seed  = response.cipher_seed_mnemonic;
-//       var _call = walletUnlocker.initWallet({wallet_password: req.query.password, cipher_seed_mnemonic: seed, aezeed_passphrase: "invalid??"},
-//       function(err, response){
-//         if (err) console.log(err);
-//         if (response) res.send({wallet: "wallet is created"});
-//       })
-//     }
-//   })
-// })
+// createWallet
+// ----
+// generates a wallet for the user
+// password - the password to encrypt it
+// note: the security totally needs work -- just tryna get it to work
+// also note: aezeed_passphrase doesnt seem to be working
+app.get('/api/createWallet', (req, res) => {
+  var _call = walletUnlocker.genSeed({}, function(err, response){
+    if (err) console.log(err);
+    if (response) {
+      var seed  = response.cipher_seed_mnemonic;
+      var _call = walletUnlocker.initWallet({wallet_password: btoa(req.query.password), cipher_seed_mnemonic: seed},
+      function(err, response){
+        if (err) console.log(err);
+        if (response) res.send({wallet: true});
+      })
+    }
+  })
+})
 //
 // // unlockWallet
 // // ----

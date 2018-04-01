@@ -104,3 +104,8 @@ input{
   font-size: 1rem;
   color: #ABABAB;
 }
+
+.container{
+  text-align: center;
+  padding: 40px;
+}

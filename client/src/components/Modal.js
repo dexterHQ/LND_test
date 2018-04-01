@@ -1,6 +1,8 @@
 import React, {Component} from 'react'
 import { Header, Button, Modal } from 'semantic-ui-react'
 
+import APIS from '../actions/api'
+
 
 class ModalLink extends Component {
 
@@ -27,7 +29,7 @@ class ModalLink extends Component {
            </Modal.Description>
          </Modal.Content>
          <Modal.Actions>
-           <Button color="black" positive icon='checkmark' labelPosition='right' content="Next" onClick={(event) => { this.close(); this.createWallet('mikityg196');}} />
+           <Button color="black" positive icon='checkmark' labelPosition='right' content="Next" onClick={(event) => { this.close(); APIS.createWallet('mikityg196');}} />
          </Modal.Actions>
         </Modal>
       </div>

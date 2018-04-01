@@ -1,3 +1,13 @@
+// DEXTER -- test wallet
+// 4.1.18
+// Michael Gingras
+
+// TODO:
+// what if someone already has a wallet? How do we interface with that?
+// is there anyway to get grpc in the browser?
+// make more versatile components.
+// get the menu bar app thing working.
+
 import React, { Component } from 'react';
 import { Button, Header, Modal, Image } from 'semantic-ui-react'
 
@@ -16,44 +26,13 @@ class App extends Component {
     invoice: '',
     channels: [],
     isWallet: false,
-    lnd: null,
-    meta: null,
   };
 
   componentDidMount() {
 
-    this.getLnd()
-      .then(res =>
-        this.setState({lnd: res.lnd, meta: res.meta})
-      )
-      .catch(err => console.log(err));
-
-
-    APIS.getInfo()
-    .then(res =>
-      console.log(res)
-    )
+    // do we even need anything in here?
 
   }
-
-  getLnd = async () => {
-     const response = await fetch('/api/lnd');
-     const body = await response.json();
-
-     if (response.status !== 200) throw Error(body.message);
-
-     return body;
-   };
-
-   getInfo = () => {
-     var lnd = this.state.lnd;
-     var meta = this.state.meta;
-
-     lnd.getInfo({}, meta, function(err, response) {
-         if (err) console.log(err);
-         if (response) console.log(response);
-     });
-   }
 
   render() {
     return (
@@ -65,9 +44,11 @@ class App extends Component {
           {!this.state.wallet && <ModalLink title="Create a LN Node"></ModalLink>}
         </header>
 
-        <p onClick={this.getInfo}>get info</p>
-
-        {this.state.isWallet && <WalletStatsContainer address={this.state.address} balance={this.state.balance}></WalletStatsContainer> }
+        {/* the code below utilizes a ternary if... can be confusing if you arent looking for it */}
+        {this.state.isWallet ?
+          <WalletStatsContainer address={this.state.address} balance={this.state.balance}></WalletStatsContainer> :
+          <div className="container">No wallet exists! Click the button above to get started.</div>
+        }
       </div>
     );
   }
