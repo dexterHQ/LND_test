@@ -32,6 +32,12 @@ app.get('/api/hello', (req, res) => {
   res.send({ express: 'Hello From h', data: req.query.data});
 });
 
+
+// in a move to get rid of the APIs being served in express, I'm thinking we might be able to just request this api on start
+app.get('/api/lnd', (req, res) => {
+  res.send({lnd: lightning, meta: meta});
+});
+
 // getInfo
 // ----
 // simply calls the getInfo command
