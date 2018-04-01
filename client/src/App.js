@@ -22,7 +22,6 @@ class App extends Component {
 
   componentDidMount() {
 
-
     this.getLnd()
       .then(res =>
         this.setState({lnd: res.lnd, meta: res.meta})
@@ -34,26 +33,6 @@ class App extends Component {
     .then(res =>
       console.log(res)
     )
-
-
-    // this.getInfo()
-    //   .then(res =>
-    //     this.setState({address: res.address, peers: res.peers, channels: res.channels})
-    //   )
-    //   .catch(err => console.log(err));
-    //
-    // this.getBalance()
-    //   .then(res =>
-    //     this.setState({ balance: res.total_balance })
-    //   )
-    //   .catch(err => console.log(err));
-    //
-    // this.getChannels()
-    //   .then(res =>
-    //     console.log(res)
-    //     // this.setState({ balance: res.total_balance })
-    //   )
-    //   .catch(err => console.log(err));
 
   }
 

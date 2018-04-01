@@ -8,10 +8,9 @@ const app = express();
 const port = process.env.PORT || 5000;
 
 
-var bodyParser = require('body-parser')
-app.use(bodyParser.json());
-app.use(express.json());
-
+TODO:
+// since these files will only exist after the wallet is created, what is the best way
+// to periodically check for their existance?
 const lndCert = fs.readFileSync('/Users/mcgingras/Library/Application Support/LND/tls.cert');
 // const adminMacaroon = fs.readFileSync('/Users/mcgingras/Library/Application Support/LND/admin.macaroon');
 const localMacaroon = fs.readFileSync('/Users/mcgingras/go/dev/alice/test_data/admin.macaroon');

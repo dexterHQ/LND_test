@@ -17,7 +17,7 @@ class ModalLink extends Component {
       <div>
         <Button onClick={this.show}>{this.props.title}</Button>
         <Modal dimmer="blurring" open={this.state.open} onClose={this.close}>
-         <Modal.Header>Welcome!</Modal.Header>
+         <Modal.Header>Welcome to Dexter!</Modal.Header>
          <Modal.Content>
            <Modal.Description>
              <Header>Create a Node</Header>
