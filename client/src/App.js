@@ -51,11 +51,9 @@ class App extends Component {
           {!this.state.wallet && <ModalLink title="Create a LN Node" update={this.updateWallet}></ModalLink>}
         </header>
 
-        <Button2 clicked={this.updateWallet} name="michael">press to create wallet</Button2>
-
         {/* the code below utilizes a ternary if... can be confusing if you arent looking for it */}
         {this.state.isWallet ?
-          <WalletStatsContainer address={this.state.address} balance={this.state.balance}></WalletStatsContainer> :
+          <WalletStatsContainer address={this.state.address} balance={this.state.balance} peers={this.state.peers}></WalletStatsContainer> :
           <div className="container--body">
             No wallet exists! Click the button above to get started. Already have one? Unlock here.
           </div>
