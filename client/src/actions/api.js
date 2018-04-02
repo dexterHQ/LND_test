@@ -43,7 +43,7 @@
     const body = await response.json();
 
     if (response.status !== 200) throw Error(body.message);
-    this.setState({'wallet': body.res.wallet });
+    console.log(body.wallet);
     return body;
   };
 

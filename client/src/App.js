@@ -13,6 +13,7 @@ import { Button, Header, Modal, Image } from 'semantic-ui-react'
 
 import APIS from './actions/api'
 
+import Button2 from './components/Button'
 import ModalLink from './components/Modal'
 import WalletStatsContainer from './components/walletStatsContainer'
 
@@ -34,20 +35,30 @@ class App extends Component {
 
   }
 
+  // the most trivial of wallet unlocks. will need to include some tests somewhere
+  updateWallet = () => {
+    this.setState({ isWallet: true })
+  }
+
   render() {
+
     return (
       <div className="App">
         <header className="hero">
           <h1 className="hero--title">DEXTER</h1>
           <h3 className="hero--subtitle">Lightning Network Test</h3>
           <p>{this.state.wallet}</p>
-          {!this.state.wallet && <ModalLink title="Create a LN Node"></ModalLink>}
+          {!this.state.wallet && <ModalLink title="Create a LN Node" update={this.updateWallet}></ModalLink>}
         </header>
+
+        <Button2 clicked={this.updateWallet} name="michael">press to create wallet</Button2>
 
         {/* the code below utilizes a ternary if... can be confusing if you arent looking for it */}
         {this.state.isWallet ?
           <WalletStatsContainer address={this.state.address} balance={this.state.balance}></WalletStatsContainer> :
-          <div className="container">No wallet exists! Click the button above to get started.</div>
+          <div className="container--body">
+            No wallet exists! Click the button above to get started. Already have one? Unlock here.
+          </div>
         }
       </div>
     );

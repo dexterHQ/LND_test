@@ -4,6 +4,7 @@ import { Header, Button, Modal } from 'semantic-ui-react'
 import APIS from '../actions/api'
 
 
+
 class ModalLink extends Component {
 
   state = {
@@ -29,7 +30,10 @@ class ModalLink extends Component {
            </Modal.Description>
          </Modal.Content>
          <Modal.Actions>
-           <Button color="black" positive icon='checkmark' labelPosition='right' content="Next" onClick={(event) => { this.close(); APIS.createWallet('mikityg196');}} />
+           {/* so the update function runs no matter what but thats not really what were tryna do tbh */}
+           <Button color="black" positive icon='checkmark' labelPosition='right' content="Next" onClick={(event) => {
+              this.close(); APIS.createWallet('mikityg196').then(this.props.update); this.props.update();
+            }} />
          </Modal.Actions>
         </Modal>
       </div>
