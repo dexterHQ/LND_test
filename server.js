@@ -9,23 +9,8 @@ const port = process.env.PORT || 5000;
 
 let btoa = (s) => { return Buffer.from(s).toString('base64') }
 
-//TODO:
-// since these files will only exist after the wallet is created, what is the best way
-// to periodically check for their existance?
-
-// const lndCert = fs.readFileSync('/Users/mcgingras/Library/Application Support/LND/tls.cert');
-// const adminMacaroon = fs.readFileSync('/Users/mcgingras/Library/Application Support/LND/admin.macaroon');
-// const localMacaroon = fs.readFileSync('/Users/mcgingras/go/dev/alice/test_data/admin.macaroon');
-
-// meta.add('macaroon', adminMacaroon.toString('hex'));
-// meta.add('macaroon', localMacaroon.toString('hex'));
 process.env.GRPC_SSL_CIPHER_SUITES = "ECDHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-SHA256:ECDHE-RSA-AES256-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES128-SHA256:ECDHE-ECDSA-AES256-SHA384:ECDHE-ECDSA-AES256-GCM-SHA384";
-// const credentials = grpc.credentials.createSsl(lndCert);
-//
-// const lnrpcDescriptor = grpc.load("rpc.proto");
-// const lnrpc = lnrpcDescriptor.lnrpc;
-// const lightning = new lnrpc.Lightning('localhost:10001', credentials);
-// const walletUnlocker = new lnrpc.WalletUnlocker('localhost:10001', credentials);
+
 
 
 // TODO:
@@ -33,6 +18,10 @@ process.env.GRPC_SSL_CIPHER_SUITES = "ECDHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES1
 // ------
 // /api/lnd/* -> for all of these check for macaroons once
 // /api/lnd/info -> macaroons are already handled....
+
+// there pretty much has to be a way to do with without having to reinit the credentials each time. I cant think of it right now
+// it would be GREAT to refactor this code but in the interest of getting this MVP done as quickly as possible I think its okay for now.
+// maybe APP.USE as a middleware?
 
 app.get('/api/hello', (req, res) => {
   res.send({ express: 'Hello From h', data: req.query.data});

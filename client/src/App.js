@@ -32,11 +32,15 @@ class App extends Component {
 
   componentDidMount() {
 
-    console.log("the component did mount");
 
     APIS.getInfo()
     .then((body) => {
-      console.log(body);
+      if(body.error){
+        console.log(body.error);
+      }
+      else{
+        this.setState({isWallet: true, address: body.address, peers: body.peers, channels: body.channels})
+      }
     })
 
 
