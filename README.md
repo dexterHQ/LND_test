@@ -14,6 +14,8 @@ NOTE:
 
 A lot of the steps above are invalid. As we make progress we are figuring that we can do a lot of the setup on behalf of the user. We are trying to determine the best possible way to go about this, but in the meantime you probably only need to init a LND instance to get started.
 
+It seems like if you start an express server, then create some files, the express server cannot pick up on the fact that some new files exist. It is incredibly annoying.
+
 
 ---
 If there are any errors with the following instructions you can contact Michael - mcg79@cornell.edu

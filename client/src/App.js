@@ -8,12 +8,12 @@
 // make more versatile components.
 // get the menu bar app thing working.
 
+// MAJOR TODO: GET THE SERVER TO PERIODICALLY CHECK IF WALLET EXISTS OR NOT OR WHAT....
+
 import React, { Component } from 'react';
-import { Button, Header, Modal, Image } from 'semantic-ui-react'
 
 import APIS from './actions/api'
 
-import Button2 from './components/Button'
 import ModalLink from './components/Modal'
 import WalletStatsContainer from './components/walletStatsContainer'
 
@@ -27,9 +27,18 @@ class App extends Component {
     invoice: '',
     channels: [],
     isWallet: false,
+    meta: null,
   };
 
   componentDidMount() {
+
+    console.log("the component did mount");
+
+    APIS.getInfo()
+    .then((body) => {
+      console.log(body);
+    })
+
 
     // do we even need anything in here?
 

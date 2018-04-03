@@ -48,8 +48,6 @@
   };
 
 
-
-
 var APIs = {
   getBalance: getBalance,
   getInfo: getInfo,
