@@ -5,10 +5,12 @@ import ModalLink from './Modal'
 
 import APIS from '../actions/api'
 
+
+// params are what make up the modal
 var peerParams = {
   title: "Connect to Peer",
-  sub: "Enter a Peer Address",
-  body: "this allows us to connect to a peer"
+  sub: "Connecting to Peer",
+  body: "Enter the Lightning address of the peer, in the format <pubkey>@host"
 }
 
 var channelParams = {

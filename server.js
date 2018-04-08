@@ -81,14 +81,31 @@ app.get('/api/balance', (req, res) => {
   });
 })
 
-
 // not sure how to send data?
 // maybe somthing to do with the req
 app.get('/api/connect', (req, res) => {
-  var _call = lightning.connectPeer({}, meta, function(err, response) {
-      if (err) console.log(err);
-      if (response) res.send({total_balance: response.total_balance});
-  });
+  if (fs.existsSync('/Users/mcgingras/go/dev/alice/test_data/admin.macaroon')){
+      const lndCert = fs.readFileSync('/Users/mcgingras/Library/Application Support/LND/tls.cert');
+      const credentials = grpc.credentials.createSsl(lndCert);
+      const localMacaroon = fs.readFileSync('/Users/mcgingras/go/dev/alice/test_data/admin.macaroon');
+      const meta = new grpc.Metadata();
+      meta.add('macaroon', localMacaroon.toString('hex'));
+
+      const lnrpcDescriptor = grpc.load("rpc.proto");
+      const lnrpc = lnrpcDescriptor.lnrpc;
+
+      const lightning = new lnrpc.Lightning('localhost:10001', credentials);
+    var addr = req.query.addr
+
+    var lnaddr = {
+      pubkey: "0292c50922a7d9876f45122e5179fdf391e0902b26a467a631170f5d55381e76a1",
+      host: "localhost:10012"
+    }
+    var _call = lightning.connectPeer({addr: lnaddr}, meta, function(err, response) {
+        if (err) console.log(err);
+        if (response) res.send({res: response});
+    });
+  }
 })
 
 // invoice

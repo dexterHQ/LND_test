@@ -6,7 +6,6 @@
     const body = await response.json();
 
     if (response.status !== 200) throw Error(body.message);
-
     return body;
   };
 
@@ -15,7 +14,6 @@
     const body = await response.json();
 
     if (response.status !== 200) throw Error(body.message);
-
     return body;
   };
 
@@ -24,7 +22,6 @@
     const body = await response.json();
 
     if (response.status !== 200) throw Error(body.message);
-
     return body;
   };
 
@@ -34,9 +31,18 @@
     console.log(body);
 
     if (response.status !== 200) throw Error(body.message);
-
     return body;
   };
+
+  // we need a pubkey and a host -- two different things :/
+  let connectPeer = async (addr) => {
+    const response = await fetch('/api/connect?addr='+addr);
+    const body = await response.json();
+    console.log(body);
+
+    if (response.status !== 200) throw Error(body.message);
+    return body;
+  }
 
   let createWallet = async (password) => {
     const response = await fetch('/api/createWallet?password='+password);
@@ -53,6 +59,7 @@ var APIs = {
   getInfo: getInfo,
   getChannels: getChannels,
   genInvoice: genInvoice,
+  connectPeer: connectPeer,
   createWallet: createWallet
 }
 
