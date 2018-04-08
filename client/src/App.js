@@ -32,7 +32,6 @@ class App extends Component {
 
   componentDidMount() {
 
-
     APIS.getInfo()
     .then((body) => {
       if(body.error){
@@ -43,9 +42,12 @@ class App extends Component {
       }
     })
 
+  }
 
-    // do we even need anything in here?
-
+  walletParams = {
+    title: "Create a LN Wallet",
+    sub: "Create a LN Wallet!",
+    body: "Next, enter a password. Since this a complete test and just a formality in getting a LN node set up, you dont have to worry about security. Just enter a password you dont care much about."
   }
 
   // the most trivial of wallet unlocks. will need to include some tests somewhere
@@ -60,8 +62,8 @@ class App extends Component {
         <header className="hero">
           <h1 className="hero--title">DEXTER</h1>
           <h3 className="hero--subtitle">Lightning Network Test</h3>
-          <p>{this.state.wallet}</p>
-          {!this.state.wallet && <ModalLink title="Create a LN Node" update={this.updateWallet}></ModalLink>}
+          <p>{this.state.isWallet}</p>
+          {!this.state.isWallet && <ModalLink {...this.walletParams} update={this.updateWallet}></ModalLink>}
         </header>
 
         {/* the code below utilizes a ternary if... can be confusing if you arent looking for it */}
