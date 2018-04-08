@@ -9,10 +9,15 @@ class ModalLink extends Component {
 
   state = {
     open: false,
+    value: ""
   }
 
   close = () => this.setState({ open: false })
   show  = () => this.setState({ open: true })
+
+  handleChange(event) {
+    this.setState({value: event.target.value});
+  }
 
 
   render() {
@@ -24,19 +29,19 @@ class ModalLink extends Component {
          <Modal.Content>
            <Modal.Description>
              <p>{this.props.body}</p>
-             <input type="text" />
+             <input type="text" value={this.state.value} onChange={this.handleChange.bind(this)} />
            </Modal.Description>
          </Modal.Content>
          <Modal.Actions>
            {/* so the update function runs no matter what but thats not really what were tryna do tbh */}
            {/* we could do an if else thing maybe for what function to run? */}
            <Button positive icon='checkmark' labelPosition='right' content="Next" onClick={(event) => {
-              this.close(); APIS.connectPeer('0292c50922a7d9876f45122e5179fdf391e0902b26a467a631170f5d55381e76a1@localhost:10012').then(() => {
+              this.close(); APIS.connectPeer(this.state.value).then(() => {
                 console.log("we are connected to peer");
               });
             }} />
            {/* <Button positive icon='checkmark' labelPosition='right' content="Next" onClick={(event) => {
-              this.close(); APIS.createWallet('mikityg196').then(() => {
+              this.close(); APIS.createWallet(this.state.value).then(() => {
                 this.props.update();
               });
             }} /> */}

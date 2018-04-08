@@ -11,7 +11,8 @@ let btoa = (s) => { return Buffer.from(s).toString('base64') }
 
 process.env.GRPC_SSL_CIPHER_SUITES = "ECDHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-SHA256:ECDHE-RSA-AES256-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES128-SHA256:ECDHE-ECDSA-AES256-SHA384:ECDHE-ECDSA-AES256-GCM-SHA384";
 
-
+let lightning;
+let meta;
 
 // TODO:
 // is there such thing as a multi-tiered express api?
@@ -23,6 +24,33 @@ process.env.GRPC_SSL_CIPHER_SUITES = "ECDHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES1
 // it would be GREAT to refactor this code but in the interest of getting this MVP done as quickly as possible I think its okay for now.
 // maybe APP.USE as a middleware?
 
+
+app.use('/lightning/', (req,res,next) => {
+  if (fs.existsSync('/Users/mcgingras/go/dev/alice/test_data/admin.macaroon')){
+    console.log("this exists");
+    const lndCert = fs.readFileSync('/Users/mcgingras/Library/Application Support/LND/tls.cert');
+    const credentials = grpc.credentials.createSsl(lndCert);
+    const localMacaroon = fs.readFileSync('/Users/mcgingras/go/dev/alice/test_data/admin.macaroon');
+
+    const lnrpcDescriptor = grpc.load("rpc.proto");
+    const lnrpc = lnrpcDescriptor.lnrpc;
+
+    meta = new grpc.Metadata();
+    meta.add('macaroon', localMacaroon.toString('hex'));
+    lightning = new lnrpc.Lightning('localhost:10001', credentials);
+    
+    next();
+  }
+});
+
+app.get('/lightning/getInfo', (req,res) => {
+  console.log("we are calling this");
+  var _call = lightning.getInfo({}, meta, function(err, response) {
+      if (err) console.log(err);
+      if (response) console.log(response);
+  });
+});
+
 app.get('/api/hello', (req, res) => {
   res.send({ express: 'Hello From h', data: req.query.data});
 });
@@ -33,7 +61,6 @@ app.get('/api/hello', (req, res) => {
 // simply calls the getInfo command
 app.get('/api/info', (req, res) => {
   if (fs.existsSync('/Users/mcgingras/go/dev/alice/test_data/admin.macaroon')){
-    console.log('does this exist?');
     const lndCert = fs.readFileSync('/Users/mcgingras/Library/Application Support/LND/tls.cert');
     const credentials = grpc.credentials.createSsl(lndCert);
     const localMacaroon = fs.readFileSync('/Users/mcgingras/go/dev/alice/test_data/admin.macaroon');
