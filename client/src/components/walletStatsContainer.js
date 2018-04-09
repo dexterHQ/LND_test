@@ -1,9 +1,6 @@
 import React from 'react'
-import { Button } from 'semantic-ui-react'
 
 import ModalLink from './Modal'
-
-import APIS from '../actions/api'
 
 
 // params are what make up the modal

@@ -9,6 +9,15 @@ const port = process.env.PORT || 5000;
 
 let btoa = (s) => { return Buffer.from(s).toString('base64') }
 
+let toHex = (s) => {
+    var s = unescape(encodeURIComponent(s))
+    var h = ''
+    for (var i = 0; i < s.length; i++) {
+        h += s.charCodeAt(i).toString(16)
+    }
+    return h
+}
+
 process.env.GRPC_SSL_CIPHER_SUITES = "ECDHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-SHA256:ECDHE-RSA-AES256-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES128-SHA256:ECDHE-ECDSA-AES256-SHA384:ECDHE-ECDSA-AES256-GCM-SHA384";
 
 let lightning;
@@ -20,14 +29,11 @@ let meta;
 // /api/lnd/* -> for all of these check for macaroons once
 // /api/lnd/info -> macaroons are already handled....
 
-// there pretty much has to be a way to do with without having to reinit the credentials each time. I cant think of it right now
-// it would be GREAT to refactor this code but in the interest of getting this MVP done as quickly as possible I think its okay for now.
-// maybe APP.USE as a middleware?
 
-
+// the is a piece of "middleware" that allows us to instantiate the lnd creds
+// I think there must be an eaiser way to do this, but its working for now...
 app.use('/lightning/', (req,res,next) => {
   if (fs.existsSync('/Users/mcgingras/go/dev/alice/test_data/admin.macaroon')){
-    console.log("this exists");
     const lndCert = fs.readFileSync('/Users/mcgingras/Library/Application Support/LND/tls.cert');
     const credentials = grpc.credentials.createSsl(lndCert);
     const localMacaroon = fs.readFileSync('/Users/mcgingras/go/dev/alice/test_data/admin.macaroon');
@@ -38,51 +44,45 @@ app.use('/lightning/', (req,res,next) => {
     meta = new grpc.Metadata();
     meta.add('macaroon', localMacaroon.toString('hex'));
     lightning = new lnrpc.Lightning('localhost:10001', credentials);
-    
+
     next();
+
+    // TODO: we should have some sort of error handling in here.
   }
 });
-
-app.get('/lightning/getInfo', (req,res) => {
-  console.log("we are calling this");
-  var _call = lightning.getInfo({}, meta, function(err, response) {
-      if (err) console.log(err);
-      if (response) console.log(response);
-  });
-});
-
-app.get('/api/hello', (req, res) => {
-  res.send({ express: 'Hello From h', data: req.query.data});
-});
-
 
 // getInfo
 // ----
 // simply calls the getInfo command
-app.get('/api/info', (req, res) => {
-  if (fs.existsSync('/Users/mcgingras/go/dev/alice/test_data/admin.macaroon')){
-    const lndCert = fs.readFileSync('/Users/mcgingras/Library/Application Support/LND/tls.cert');
-    const credentials = grpc.credentials.createSsl(lndCert);
-    const localMacaroon = fs.readFileSync('/Users/mcgingras/go/dev/alice/test_data/admin.macaroon');
-    const meta = new grpc.Metadata();
-    meta.add('macaroon', localMacaroon.toString('hex'));
+app.get('/lightning/getInfo', (req,res) => {
+  var _call = lightning.getInfo({}, meta, function(err, response) {
+      if (err) console.log(err);
+      if (response) res.send({ address: response.identity_pubkey, peers: response.num_peers, channels: response.num_active_channels });
+  });
+});
 
-    const lnrpcDescriptor = grpc.load("rpc.proto");
-    const lnrpc = lnrpcDescriptor.lnrpc;
 
-    const lightning = new lnrpc.Lightning('localhost:10001', credentials);
+// openChannel
+// ----
+// opens a channel with a certain port
+app.get('/lightning/openChannel', (req,res) => {
+  var addr = Buffer.from(req.query.addr, 'hex');
+  var amt  = Number(req.query.amt);
+  var _call = lightning.openChannel({node_pubkey: addr, local_funding_amount: amt}, meta);
 
-    var _call = lightning.getInfo({}, meta, function(err, response) {
-        if (err) console.log(err);
-        if (response) res.send({ address: response.identity_pubkey, peers: response.num_peers, channels: response.num_active_channels });
-    });
-  }
+  _call.on('data', function(message) {
+    console.log(message);
+  });
 
-  else {
-    console.log('no it does not exist');
-    res.send({error: "sorry! LND not initialized yet!"})
-  }
-})
+  _call.on('end', function() {
+    console.log("END");
+  });
+
+  _call.on('status', function(status) {
+    console.log("Current status: " + status);
+  });
+});
+
 
 // channels
 // ----

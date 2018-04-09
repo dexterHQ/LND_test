@@ -10,12 +10,20 @@
   };
 
  let getInfo = async () => {
-    const response = await fetch('/api/info');
+    const response = await fetch('/lightning/getInfo');
     const body = await response.json();
 
     if (response.status !== 200) throw Error(body.message);
     return body;
   };
+
+  let openChannel = async (addr,amt) => {
+    const response = await fetch('/lightning/openChannel?addr='+addr+"&amt="+amt);
+    const body = await response.json();
+
+    if (response.status !== 200) throw Error(body.message);
+    return body;
+  }
 
   let getChannels = async () => {
     const response = await fetch('/api/channels');
@@ -58,6 +66,7 @@ var APIs = {
   getBalance: getBalance,
   getInfo: getInfo,
   getChannels: getChannels,
+  openChannel: openChannel,
   genInvoice: genInvoice,
   connectPeer: connectPeer,
   createWallet: createWallet

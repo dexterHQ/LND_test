@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import { Header, Button, Modal } from 'semantic-ui-react'
+import { Button, Modal } from 'semantic-ui-react'
 
 import APIS from '../actions/api'
 
@@ -36,10 +36,15 @@ class ModalLink extends Component {
            {/* so the update function runs no matter what but thats not really what were tryna do tbh */}
            {/* we could do an if else thing maybe for what function to run? */}
            <Button positive icon='checkmark' labelPosition='right' content="Next" onClick={(event) => {
+              this.close(); APIS.openChannel('0292c50922a7d9876f45122e5179fdf391e0902b26a467a631170f5d55381e76a1','100000').then(() => {
+                console.log("we have opened a channel");
+              });
+            }} />
+           {/* <Button positive icon='checkmark' labelPosition='right' content="Next" onClick={(event) => {
               this.close(); APIS.connectPeer(this.state.value).then(() => {
                 console.log("we are connected to peer");
               });
-            }} />
+            }} /> */}
            {/* <Button positive icon='checkmark' labelPosition='right' content="Next" onClick={(event) => {
               this.close(); APIS.createWallet(this.state.value).then(() => {
                 this.props.update();
