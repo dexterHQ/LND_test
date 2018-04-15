@@ -61,6 +61,15 @@
     return body;
   };
 
+  let unlockWallet = async (password) => {
+    const response = await fetch('/api/unlockWallet?password='+password);
+    const body = await response.json();
+
+    if (response.status !== 200) throw Error(body.message);
+    console.log(body.wallet);
+    return body;
+  }
+
 
 var APIs = {
   getBalance: getBalance,
@@ -69,7 +78,8 @@ var APIs = {
   openChannel: openChannel,
   genInvoice: genInvoice,
   connectPeer: connectPeer,
-  createWallet: createWallet
+  createWallet: createWallet,
+  unlockWallet: unlockWallet
 }
 
 export default APIs;

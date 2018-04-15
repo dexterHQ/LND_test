@@ -175,17 +175,25 @@ app.get('/api/createWallet', (req, res) => {
     }
   })
 })
-//
+
+
 // // unlockWallet
 // // ----
 // // unlocks an existing wallet
 // // password - the password to encrypt it
-// app.get('/api/unlockWallet', (req, res) => {
-//   var _call = walletUnlocker.unlockWallet({wallet_password: req.query.password}, function(err, response) {
-//     if (err) console.log(err);
-//     if (response) res.send({res: "wallet unlocked"})
-//   });
-// })
+app.get('/api/unlockWallet', (req, res) => {
+  const lndCert = fs.readFileSync('/Users/mcgingras/Library/Application Support/LND/tls.cert');
+  const credentials = grpc.credentials.createSsl(lndCert);
+
+  const lnrpcDescriptor = grpc.load("rpc.proto");
+  const lnrpc = lnrpcDescriptor.lnrpc;
+  const walletUnlocker = new lnrpc.WalletUnlocker('localhost:10003', credentials);
+  
+  var _call = walletUnlocker.unlockWallet({wallet_password: btoa(req.query.password)}, function(err, response) {
+    if (err) console.log(err);
+    if (response) res.send({res: "wallet unlocked"})
+  });
+})
 
 
 app.listen(port, () => console.log(`Listening on port ${port}`));

@@ -30,8 +30,18 @@ class ModalLink extends Component {
            });
          }} />;
         break;
-        
-      case 2: // open channel
+
+      case 2:
+        return <Button positive icon='checkmark' labelPosition='right' content="Unlock" onClick={(event) => {
+          console.log("we are trying to unlock the wallet");
+            this.close(); APIS.unlockWallet("thisismypassword").then(() => {
+              console.log("the wallet is unlocked");
+            });
+          }} />;
+
+        break;
+
+      case 3: // open channel
         return <Button positive icon='checkmark' labelPosition='right' content="Next" onClick={(event) => {
             this.close(); APIS.openChannel('0292c50922a7d9876f45122e5179fdf391e0902b26a467a631170f5d55381e76a1','100000').then(() => {
               console.log("we have opened a channel");
@@ -39,7 +49,7 @@ class ModalLink extends Component {
           }} />;
         break;
 
-      case 3:
+      case 4:
         return <Button positive icon='checkmark' labelPosition='right' content="Next" onClick={(event) => {
            this.close(); APIS.connectPeer(this.state.value).then(() => {
              console.log("we are connected to peer");
@@ -52,7 +62,6 @@ class ModalLink extends Component {
 
     }
   }
-
 
   render() {
     return (

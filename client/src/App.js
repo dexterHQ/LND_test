@@ -51,6 +51,13 @@ class App extends Component {
     body: "Next, enter a password. Since this a complete test and just a formality in getting a LN node set up, you dont have to worry about security. Just enter a password you dont care much about."
   }
 
+  unlockParams = {
+    type: 2,
+    title: "Unlock Wallet",
+    sub: "Unlock your Wallet",
+    body: "Enter your password to unlock your wallet"
+  }
+
   // the most trivial of wallet unlocks. will need to include some tests somewhere
   updateWallet = () => {
     this.setState({ isWallet: true })
@@ -72,6 +79,7 @@ class App extends Component {
           <WalletStatsContainer address={this.state.address} balance={this.state.balance} peers={this.state.peers}></WalletStatsContainer> :
           <div className="container--body">
             No wallet exists! Click the button above to get started. Already have one? Unlock here.
+            <ModalLink {...this.unlockParams}></ModalLink>
           </div>
         }
       </div>
