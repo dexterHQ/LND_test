@@ -43,10 +43,9 @@ app.use('/lightning/', (req,res,next) => {
 
     meta = new grpc.Metadata();
     meta.add('macaroon', localMacaroon.toString('hex'));
-    lightning = new lnrpc.Lightning('localhost:10001', credentials);
+    lightning = new lnrpc.Lightning('localhost:10003', credentials);
 
     next();
-
     // TODO: we should have some sort of error handling in here.
   }
 });
@@ -160,7 +159,7 @@ app.get('/api/createWallet', (req, res) => {
 
   const lnrpcDescriptor = grpc.load("rpc.proto");
   const lnrpc = lnrpcDescriptor.lnrpc;
-  const walletUnlocker = new lnrpc.WalletUnlocker('localhost:10001', credentials);
+  const walletUnlocker = new lnrpc.WalletUnlocker('localhost:10003', credentials);
 
   var _call = walletUnlocker.genSeed({}, function(err, response){
     if (err) console.log(err);

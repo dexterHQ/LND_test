@@ -45,6 +45,7 @@ class App extends Component {
   }
 
   walletParams = {
+    type: 1,
     title: "Create a LN Wallet",
     sub: "Create a LN Wallet!",
     body: "Next, enter a password. Since this a complete test and just a formality in getting a LN node set up, you dont have to worry about security. Just enter a password you dont care much about."
