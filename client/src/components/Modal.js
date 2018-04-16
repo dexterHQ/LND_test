@@ -31,7 +31,7 @@ class ModalLink extends Component {
          }} />;
         break;
 
-      case 2:
+      case 2: // unlock wallet
         return <Button positive icon='checkmark' labelPosition='right' content="Unlock" onClick={(event) => {
           console.log("we are trying to unlock the wallet");
             this.close(); APIS.unlockWallet("thisismypassword").then(() => {
@@ -49,9 +49,9 @@ class ModalLink extends Component {
           }} />;
         break;
 
-      case 4:
+      case 4: // connect to peer
         return <Button positive icon='checkmark' labelPosition='right' content="Next" onClick={(event) => {
-           this.close(); APIS.connectPeer(this.state.value).then(() => {
+           this.close(); APIS.connectPeer('02531e32fb70cdc03f6e686cdd39b017bde0d207d106a9eeb3dfb4247b81234866','localhost:10012').then(() => {
              console.log("we are connected to peer");
            });
          }} />;

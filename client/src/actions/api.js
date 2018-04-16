@@ -42,15 +42,23 @@
     return body;
   };
 
-  // we need a pubkey and a host -- two different things :/
-  let connectPeer = async (addr) => {
-    const response = await fetch('/api/connect?addr='+addr);
+  let connectPeer = async (addr,host) => {
+    const response = await fetch('/api/connectPeer?addr='+addr+"&host="+host);
     const body = await response.json();
     console.log(body);
 
     if (response.status !== 200) throw Error(body.message);
     return body;
-  }
+  };
+
+  let listPeers = async () => {
+    const response = await fetch('/lightning/listPeers');
+    const body = await response.json();
+    console.log(body);
+
+    if (response.status !== 200) throw Error(body.message);
+    return body;
+  };
 
   let createWallet = async (password) => {
     const response = await fetch('/api/createWallet?password='+password);
@@ -79,7 +87,8 @@ var APIs = {
   genInvoice: genInvoice,
   connectPeer: connectPeer,
   createWallet: createWallet,
-  unlockWallet: unlockWallet
+  unlockWallet: unlockWallet,
+  listPeers: listPeers
 }
 
 export default APIs;
